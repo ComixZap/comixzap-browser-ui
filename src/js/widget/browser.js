@@ -4,12 +4,13 @@ var $ = require('jquery');
 var EventEmitter = require('events').EventEmitter;
 var klass = require('klass');
 var doT = require('dot');
+var Promise = require('bluebird');
 
 module.exports = klass(EventEmitter).extend({
+    inhibitScroll: false,
     initialize: function (selector)
     {
         this.$root = $(selector);
-        this.initialized = false;
         this.$currentElement = null;
         this.initializeTemplates();
         this.bindEvents();
@@ -20,7 +21,7 @@ module.exports = klass(EventEmitter).extend({
     },
     start: function ()
     {
-        this.getFiles('', this.$root.children('.browser-root'));
+        return this.getFiles('');
     },
     bindEvents: function ()
     {
@@ -33,34 +34,64 @@ module.exports = klass(EventEmitter).extend({
                 var $directoryChildren = $element.children('.directory-children');
                 $directoryChildren.slideUp();
                 evt.stopPropagation();
-                window.location.hash = '#';
+                evt.preventDefault();
                 return false;
+            } else if ($element.attr('data-filetype') == 'directory') {
+                //check if hash matches, otherwise let the hashchange work
+                var path = $element.attr('data-path');
+                if (window.location.hash === '#!' + path) {
+                    self.getFiles(path);
+                }
             }
+            self.inhibitScroll = true;
         });
     },
-    getFiles: function (path, $element)
-    {
-        var self = this;
+    selectFile: function (path) {
+        if (path) {
+            var $element = $('[data-path="'  + path + '"]');
+            if (!$element.length) {
+                return;
+            }
+        } else {
+            var $element = this.$root.find('.browser-root');
+        }
         if (this.$currentElement) {
             this.$currentElement.removeClass('active');
         }
         this.$currentElement = $element;
+        $element.addClass('active');
+
+        return $element;
+    },
+    getFiles: function (path)
+    {
+        var self = this;
+        var deferred = Promise.pending();
+        var $element = self.selectFile(path);
+        if (!$element) {
+            deferred.reject();
+            return deferred.promise;
+        }
         var $directoryChildren = $element.children('.directory-children');
         $directoryChildren.empty();
-        $element.addClass('active');
         $directoryChildren.hide();
-        this.dao.getFileList(path, function (err, directory, files) {
-            if (err) return;
+        self.dao.getFileList(path, function (err, directory, files) {
+            if (err) return deferred.reject();
             files.forEach(function (fileData) {
                 fileData.path = [directory, fileData.filename].join('/');
                 $directoryChildren.append(self.browserRowTemplate(fileData));
                 $element.attr('data-expanded', true);
             });
-            if (!self.initialized) {
-                self.emit('start');
-            }
             $directoryChildren.slideDown();
+            return deferred.resolve();
         });
+        return deferred.promise;
+    },
+    scrollToActive: function () {
+        var activeOffset = this.$currentElement.offset().top;
+        var rootOffset = this.$root.offset().top;
+        var totalOffset = activeOffset - rootOffset + this.$root.scrollTop();
+        this.$root.scrollTop(totalOffset);
     },
     initializeTemplates: function () {
         this.browserRowTemplate = doT.compile($('#cbz-reader-template-browser-row').html());

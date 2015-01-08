@@ -9,6 +9,9 @@ module.exports = klass({
         this.comicPagesUrl = '/comic/list';
         this.fileListUrl   = '/file-list';
     },
+    setApiRoot: function (apiRoot) {
+        this.apiRoot = apiRoot;
+    },
     setComicPagesUrl: function (url)
     {
         this.comicPagesUrl = url
@@ -17,10 +20,16 @@ module.exports = klass({
     {
         this.fileListUrl = url
     },
+    getFileListUrl: function () {
+        return this.apiRoot + this.fileListUrl;
+    },
+    getComicPagesUrl: function () {
+        return this.apiRoot + this.comicPagesUrl;
+    },
     getFileList: function (path, cb)
     {
         $.ajax({
-            url: this.fileListUrl,
+            url: this.getFileListUrl(),
             data: {directory: path},
             success: function (returnValue) {
                 if (returnValue.status === 0) {
@@ -37,7 +46,7 @@ module.exports = klass({
     getComicPages: function (path, cb)
     {
         $.ajax({
-            url: this.comicPagesUrl,
+            url: this.getComicPagesUrl(),
             data: {file: path},
             success: function (returnValue) {
                 if (returnValue.status === 0) {

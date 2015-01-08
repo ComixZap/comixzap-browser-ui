@@ -1,6 +1,6 @@
-//@import '../../node_modules/foundation/scss/normalize.scss';
-@import '../../node_modules/zurb-foundation-5/scss/foundation.scss';
-@import 'icons.scss';
+@import '../../node_modules/zurb-foundation-5/scss/normalize.scss';
+@import '../../node_modules/zurb-foundation-5/scss/foundation/components/buttons.scss';
+@import './icons.scss';
 
 html,body{
     height:100%;
@@ -134,14 +134,28 @@ a,a:link,a:active,a:visited{
     .nav li.active > a {
         background: #ccccff;
     }
-    .browser-item .browser-icon {
-        width: 20px;
-    }
-    .browser-item .fi-folder {
-        color: orange;
-    }
-    .browser-item .fi-page {
-        color: light-gray;
+    .browser-item {
+        > a {
+            display: block;
+            position:relative;
+        }
+        .browser-icon {
+            position:absolute;
+            left: 0;
+            top:0;
+            height: 1.4em;
+            line-height: 1.4em;
+        }
+        .file-name {
+            display: block;
+            margin-left: 15px;
+        }
+        .icon-folder {
+            color: orange;
+        }
+        .icon-file-text {
+            color: light-gray;
+        }
     }
 }
 
@@ -173,11 +187,13 @@ a,a:link,a:active,a:visited{
     .current-file-contents {
         padding: 10px;
     }
-    .current-file-list li {
+    .current-file-list > li {
         position:relative;
         cursor:pointer;
-        padding-right:24px;
-        white-space:nowrap;
+        > a {
+            display: block;
+            word-break: break-all;
+        }
         &.selected > a {
             background:#aaf;
         }
@@ -201,7 +217,7 @@ a,a:link,a:active,a:visited{
         display:block;
         width:100%;
         max-width: none; //override normalize rules
-        transition: width .3s, height .3s;
+        transition: width .2s, height .2s;
         transition-timing-function: linear;
         &.zoom {
             width:200%;

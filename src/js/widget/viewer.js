@@ -13,11 +13,16 @@ var MAX_ZOOM = 200;
 
 module.exports = klass(EventEmitter).extend({
     url: '/comic/image',
-    initialize: function (selector)
+    initialize: function (selector, config)
     {
+        this.config = config || {};
+        this.apiRoot = config.api_root || '';
         this.$root = $(selector);
         this.$image = this.$root.find('.image');
         this.bindEvents();
+    },
+    getImageUrl: function () {
+        return this.apiRoot + this.url;
     },
     bindEvents: function()
     {
@@ -89,7 +94,6 @@ module.exports = klass(EventEmitter).extend({
     {
         this.$root.scrollTop(0);
         this.$image.hide();
-        this.$image.attr('src', this.url + '?file=' + encodeURIComponent(file) + '&offset=' + offset);
-        this.$image.css('width', '100%');
+        this.$image.attr('src', this.getImageUrl() + '?file=' + encodeURIComponent(file) + '&offset=' + offset);
     }
 });

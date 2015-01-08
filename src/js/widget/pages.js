@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var EventEmitter = require('events').EventEmitter;
 var klass = require('klass');
+var path = require('path');
 
 module.exports = klass(EventEmitter).extend({
     currentFile: null,
@@ -14,14 +15,24 @@ module.exports = klass(EventEmitter).extend({
         this.currentFile = null;
         this.$root = $(selector);
         this.$currentFileList = this.$root.find('.current-file-list');
+        this.$currentFileTitle = this.$root.find('.current-file-title')
+        this.bindEvents();
     },
     setDao: function (dao)
     {
         this.dao = dao;
     },
+    bindEvents: function () 
+    {
+        var self = this;
+        this.$root.on('click', 'a', function (e) {
+            self.emit('click');
+        });
+    },
     setCurrentFile: function (filename)
     {
         this.currentFile = filename;
+        this.$currentFileTitle.text(path.basename(filename));
     },
     loadPage: function (filename, page)
     {
@@ -46,7 +57,7 @@ module.exports = klass(EventEmitter).extend({
         this.$currentFileList.empty();
         this.$currentFileList.scrollTop(0);
         pages.forEach(function (page, index) {
-            self.$currentFileList.append('<li data-offset="' + page.fileOffset + '"><a href="#!' + path + '::' + (index + 1) +'"><span class="badge">' + (index + 1) + '</span><span class="page-filename">' + page.filename + '</span></a></li>')
+            self.$currentFileList.append('<li data-offset="' + page.fileOffset + '"><a href="#!' + path + '::' + (index + 1) +'"><span class="page-filename">' + page.filename + '</span></a></li>')
         });
     },
     selectPage: function (page)
