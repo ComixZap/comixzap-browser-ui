@@ -1,5 +1,5 @@
 /.idea
-/config/config.json
+/config.json
 
 /dist
 /node_modules
