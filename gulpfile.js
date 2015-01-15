@@ -20,6 +20,7 @@ gulp.task('js', function() {
         entries: ['./src/js/main.js'],
         debug: true
     })
+        .require(__dirname + '/config.json', {expose: 'config'})
         .bundle()
         .pipe(source('main.js'))
         .pipe(buffer())
