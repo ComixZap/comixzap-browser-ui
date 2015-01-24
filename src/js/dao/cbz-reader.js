@@ -3,6 +3,8 @@
 var $ = require('jquery');
 var klass = require('klass');
 
+$.support.cors = true;
+
 module.exports = klass({
     initialize: function ()
     {
