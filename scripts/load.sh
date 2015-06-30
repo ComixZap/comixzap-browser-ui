@@ -17,8 +17,6 @@ echo '{}' > config.json
 ./node_modules/.bin/gulp build
 
 mkdir -p "$rootdir/public"
-cp dist/index.html "$rootdir/public"
-cp -r dist/css "$rootdir/public"
-cp -r dist/js "$rootdir/public"
+cp -r dist/* dist/.* "$rootdir/public"
 
 cd "$cwd"
