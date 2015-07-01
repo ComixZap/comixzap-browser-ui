@@ -54,9 +54,9 @@ module.exports = klass(EventEmitter).extend({
     onPageClick: function () {
         this.inhibitBrowserScroll();
     },
-    onPage: function (path, offset)
+    onPage: function (data)
     {
-        this.viewer.loadPage(path, offset);
+        this.viewer.loadPage(data);
     },
     onPageUpdate: function(pages, page)
     {

@@ -21,8 +21,8 @@ module.exports = klass(EventEmitter).extend({
         this.$image = this.$root.find('.image');
         this.bindEvents();
     },
-    getImageUrl: function () {
-        return this.apiRoot + this.url;
+    getImageUrl: function (data) {
+        return this.apiRoot + this.url + '?file=' + encodeURIComponent(data.path) + (data.filename ? ('&extract_file=' + encodeURIComponent(data.filename)) : ('&offset=' + data.offset));
     },
     bindEvents: function()
     {
@@ -90,10 +90,10 @@ module.exports = klass(EventEmitter).extend({
             element.style.width = percentage + '%';
         }
     },
-    loadPage: function (file, offset)
+    loadPage: function (data)
     {
         this.$root.scrollTop(0);
         this.$image.hide();
-        this.$image.attr('src', this.getImageUrl() + '?file=' + encodeURIComponent(file) + '&offset=' + offset);
+        this.$image.attr('src', this.getImageUrl(data));
     }
 });

@@ -63,16 +63,22 @@
                 </div>
             </div>
         </div>
-        <script id="cbz-reader-template-browser-row" type="application/x-template-dot">
-            <li class="browser-item" data-path="{{= it.path }}" data-filetype="{{= it.directory ? 'directory' : 'file' }}">
-                <a href="#!{{= it.path }}{{= it.directory ? '' : '::1' }}">
-                    <span class="browser-icon {{= it.directory ? 'icon-folder' : 'icon-file-text' }}"></span>
-                    <span class="file-name">{{= it.filename }}</span>
+        <script id="cz-template-browser-row" type="application/x-template">
+            <li class="browser-item" data-path="{{ path }}" data-filetype="{{#directory}}directory{{/directory}}{{^directory}}file{{/directory}}">
+                <a href="#!{{ path }}{{^directory}}::1{{/directory}}">
+                    <span class="browser-icon {{#directory}}icon-folder{{/directory}}{{^directory}}icon-file-text{{/directory}}"></span>
+                    <span class="file-name">{{ filename }}</span>
                 </a>
-                {{? it.directory }}
-                <ol class="nav directory-children">
-                </ol>
-                {{?}}
+                {{#directory}}
+                <ol class="nav directory-children"></ol>
+                {{/directory}}
+            </li>
+        </script>
+        <script id="cz-template-page-row" type="application/x-template">
+            <li {{#filename}}data-filename="{{ filename }}"{{/filename}} {{#fileOffset}}data-offset="{{ fileOffset }}"{{/fileOffset}} data-index={{ index }}>
+                <a href="#!{{ path }}::{{ index }}">
+                    <span class="page-filename">{{ filename }}</span>
+                </a>
             </li>
         </script>
         <script src="js/main.js"></script>
