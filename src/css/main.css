@@ -181,11 +181,11 @@ a,a:link,a:active,a:visited{
             top:0;
             margin: auto 0;
             height: 15px;
-            word-break: break-all;
         }
         .file-name {
             display: block;
             margin-left: 25px;
+            white-space: nowrap;
         }
         .icon-folder {
             color: orange;

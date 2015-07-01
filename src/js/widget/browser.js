@@ -3,28 +3,24 @@
 var $ = require('jquery');
 var EventEmitter = require('events').EventEmitter;
 var klass = require('klass');
-var doT = require('dot');
+var Hogan = require('hogan');
 var Promise = require('bluebird');
 
 module.exports = klass(EventEmitter).extend({
     inhibitScroll: false,
-    initialize: function (selector)
-    {
+    initialize: function (selector) {
         this.$root = $(selector);
         this.$currentElement = null;
         this.initializeTemplates();
         this.bindEvents();
     },
-    setDao: function (dao)
-    {
+    setDao: function (dao) {
         this.dao = dao;
     },
-    start: function ()
-    {
+    start: function () {
         return this.getFiles('');
     },
-    bindEvents: function ()
-    {
+    bindEvents: function () {
         var self = this;
         this.$root.on('click', 'a', function (evt) {
             var $this = $(this);
@@ -63,8 +59,7 @@ module.exports = klass(EventEmitter).extend({
 
         return $element;
     },
-    getFiles: function (path)
-    {
+    getFiles: function (path) {
         var self = this;
         var deferred = Promise.pending();
         var $element = self.selectFile(path);
@@ -79,7 +74,7 @@ module.exports = klass(EventEmitter).extend({
             if (err) return deferred.reject();
             files.forEach(function (fileData) {
                 fileData.path = [directory, fileData.filename].join('/');
-                $directoryChildren.append(self.browserRowTemplate(fileData));
+                $directoryChildren.append(self.browserRowTemplate.render(fileData));
                 $element.attr('data-expanded', true);
             });
             $directoryChildren.slideDown();
@@ -94,6 +89,6 @@ module.exports = klass(EventEmitter).extend({
         this.$root.scrollTop(totalOffset);
     },
     initializeTemplates: function () {
-        this.browserRowTemplate = doT.compile($('#cbz-reader-template-browser-row').html());
+        this.browserRowTemplate = Hogan.compile($('#cz-template-browser-row').html());
     }
 });
