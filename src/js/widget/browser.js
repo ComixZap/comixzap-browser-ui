@@ -68,9 +68,10 @@ module.exports = klass(EventEmitter).extend({
             return deferred.promise;
         }
         var $directoryChildren = $element.children('.directory-children');
-        $directoryChildren.empty();
-        $directoryChildren.hide();
+        $directoryChildren.empty().append(this.loadingTemplate.render());
         self.dao.getFileList(path, function (err, directory, files) {
+            $directoryChildren.empty();
+            $directoryChildren.hide();
             if (err) return deferred.reject();
             files.forEach(function (fileData) {
                 fileData.path = [directory, fileData.filename].join('/');
@@ -90,5 +91,6 @@ module.exports = klass(EventEmitter).extend({
     },
     initializeTemplates: function () {
         this.browserRowTemplate = Hogan.compile($('#cz-template-browser-row').html());
+        this.loadingTemplate = Hogan.compile($('#cz-template-browser-loading').html());
     }
 });

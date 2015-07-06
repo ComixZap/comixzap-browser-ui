@@ -33,15 +33,15 @@
             <div id="cbz-reader-toolbar" class="navbar navbar-default" role="navigation">
                 <div class="toolbar-body">
                     <div class="toolbar-left navbar-left">
-                        <a class="button round icon-folder" data-action="toggle-browser"></a>
-                        <a class="button round icon-file-text" data-action="toggle-pages"></a>
+                        <a class="button icon-folder" data-action="toggle-browser"></a>
+                        <a class="button icon-file-text" data-action="toggle-pages"></a>
                     </div>
                     <div class="toolbar-right navbar-right">
-                        <a class="button round icon-enlarge" data-action="fullscreen"></a>
+                        <a class="button icon-enlarge" data-action="fullscreen"></a>
                     </div>
                     <div class="toolbar-center">
-                        <a class="button round icon-arrow-left" data-action="previous-page" disabled></a>
-                        <a class="button round icon-arrow-right" data-action="next-page" disabled></a>
+                        <a class="button icon-arrow-left" data-action="previous-page" disabled></a>
+                        <a class="button icon-arrow-right" data-action="next-page" disabled></a>
                     </div>
                 </div>
             </div>
@@ -55,8 +55,9 @@
                     <img class="image" />
                 </div>
                 <div id="cbz-reader-pages">
-                    <div>
+                    <div class="pages-wrapper">
                         <div class="current-file-title">No File</div>
+                        <!--<a class="button preload">Preload</a>-->
                         <ol class="nav current-file-list">
                         </ol>
                     </div>
@@ -74,12 +75,25 @@
                 {{/directory}}
             </li>
         </script>
+        <script id="cz-template-browser-loading" type="application/x-template">
+            <li class="browser-item loading">
+                <span class="browser-icon">
+                    <span class="loading-icon icon-spinner6"></span>
+                </span>
+                <span class="file-name">Loading ...</span>
+            </li>
+        </script>
         <script id="cz-template-page-row" type="application/x-template">
             <li {{#filename}}data-filename="{{ filename }}"{{/filename}} {{#fileOffset}}data-offset="{{ fileOffset }}"{{/fileOffset}} data-index={{ index }}>
                 <a href="#!{{ path }}::{{ index }}">
+                    <img class="page-thumb no-src"/>
                     <span class="page-filename">{{ filename }}</span>
                 </a>
             </li>
+        </script>
+        <script id="cz-template-page-loading" type="application/x-template">
+            <span class="loading-icon icon-spinner6"></span>
+            <span class="file-name">Loading ...</span>
         </script>
         <script src="js/main.js"></script>
     </body>
