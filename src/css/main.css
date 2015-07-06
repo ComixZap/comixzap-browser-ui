@@ -12,6 +12,24 @@ html,body{
     user-select: none;
 }
 
+.button {
+    display: inline-block;
+    color: white;
+    padding: 8px 16px;
+    background: #48c;
+    text-align: center;
+    border-radius: 1000px;
+    &:hover{
+        background: #48e;
+    }
+    &:active{
+        background: #48a;
+    }
+    &[disabled]{
+        background: #888;
+    }
+}
+
 #cbz-reader-container{
     background:black;
     height:100%
@@ -29,6 +47,7 @@ html,body{
     line-height: 50px;
     vertical-align: middle;
     box-sizing: border-box;
+    font-size: 16px;
 
     .toolbar-body {
         margin: auto 0;
@@ -51,26 +70,6 @@ html,body{
 
         .toolbar-center {
             text-align:center;
-        }
-
-        .button {
-          display: inline-block;
-          font-size: 16px;
-          color: white;
-          padding: 8px 16px;
-          background: #48c;
-          width: 20px;
-          text-align: center;
-          border-radius: 1000px;
-          &:hover{
-            background: #48e;
-          }
-          &:active{
-            background: #48a;
-          }
-          &[disabled]{
-            background: #888;
-          }
         }
     }
 }
@@ -108,6 +107,10 @@ html,body{
     box-shadow:0 0 5px #444;
     transition: width .3s, left .3s;
     transition-timing-function: linear;
+    .preload {
+      font-size: 10px;
+      padding: 4px 8px;
+    }
 }
 
 #cbz-reader-viewer {
@@ -176,16 +179,18 @@ a,a:link,a:active,a:visited{
         }
         .browser-icon {
             position:absolute;
-            left: 5px;
+            left: 8px;
             bottom: 0;
             top:0;
             margin: auto 0;
             height: 15px;
+            padding-bottom: 3px;
         }
         .file-name {
             display: block;
-            margin-left: 25px;
+            margin-left: 30px;
             white-space: nowrap;
+            padding: 8px 0;
         }
         .icon-folder {
             color: orange;
@@ -210,16 +215,28 @@ a,a:link,a:active,a:visited{
         margin:0;
         line-height: 18px;
     }
+    .loading {
+        position: relative;
+        .loading-icon {
+            animation: cz-spin 1s infinite linear;
+        }
+    }
 }
 
 #cbz-reader-pages {
+    .pages-wrapper {
+        padding: 8px;
+    }
     .active a {
         background: #ccccff;
     }
     .current-file-title {
         font-weight:bold;
         color:#666;
-        text-transform:uppercase
+        text-transform:uppercase;
+        .loading-icon {
+            animation: cz-spin 1s infinite linear;
+        }
     }
     .current-file-contents {
         padding: 10px;
@@ -227,9 +244,13 @@ a,a:link,a:active,a:visited{
     .current-file-list > li {
         position:relative;
         cursor:pointer;
+        .no-src {
+            visibility: hidden;
+        }
         > a {
             display: block;
             word-break: break-all;
+            padding: 8px 0;
         }
         &.selected > a {
             background:#aaf;
@@ -340,3 +361,15 @@ a,a:link,a:active,a:visited{
         }
     }
 }
+
+/* copied from FontAwesome fa-spin */
+@keyframes cz-spin {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(359deg)
+    }
+}
+

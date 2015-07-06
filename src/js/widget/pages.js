@@ -35,8 +35,9 @@ module.exports = klass(EventEmitter).extend({
     loadPage: function (filename, page) {
         var self = this;
         if (this.currentFile != filename) {
+            this.displayLoading();
             this.dao.getComicPages(filename, function (err, path, pages) {
-                if (err) return;
+                if (err) return self.displayError(err);
                 self.setCurrentFile(filename);
                 self.updatePages(path, pages);
                 self.selectPage(page);
@@ -46,6 +47,13 @@ module.exports = klass(EventEmitter).extend({
             this.selectPage(page);
             this.emit('update', this.lastPage, page);
         }
+    },
+    displayLoading: function () {
+        this.$currentFileTitle.html(this.pageLoadingTemplate.render());
+        this.$currentFileList.empty();
+    },
+    displayError: function (err) {
+        // TODO
     },
     updatePages: function (path, pages) {
         var self = this;
@@ -82,5 +90,6 @@ module.exports = klass(EventEmitter).extend({
     },
     initializeTemplates: function () {
         this.pageRowTemplate = Hogan.compile($('#cz-template-page-row').html());
+        this.pageLoadingTemplate = Hogan.compile($('#cz-template-page-loading').html());
     }
 });
