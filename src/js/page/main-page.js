@@ -112,7 +112,9 @@ module.exports = klass(EventEmitter).extend({
         } else {
             var pathMatch = /^#\!(.+)$/.exec(hash);
             if (pathMatch) {
-              path = pathMatch[1];
+              var path = pathMatch[1];
+            } else {
+              path = '';
             }
         }
         if (this.browser.selectFile(path)) {

@@ -53,7 +53,9 @@ module.exports = klass(EventEmitter).extend({
         this.$currentFileList.empty();
     },
     displayError: function (err) {
+    console.log(err)
         // TODO
+        this.$currentFileTitle.html(err.message);
     },
     updatePages: function (path, pages) {
         var self = this;
