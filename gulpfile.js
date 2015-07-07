@@ -2,27 +2,20 @@
 
 var gulp = require('gulp');
 
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var gulpIf = require('gulp-if');
-
-var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer');
-var postcssImport = require('postcss-import');
-var postcssNested = require('postcss-nested');
-var cssmin = require('gulp-cssmin');
-
-var livereload = require('gulp-livereload');
 
 var isProduction = process.env.APPLICATION_ENVIRONMENT === 'production';
 
 gulp.task('js', function() {
+    var browserify = require('browserify');
+    var source = require('vinyl-source-stream');
+    var buffer = require('vinyl-buffer');
+    var uglify = require('gulp-uglify');
+    var sourcemaps = require('gulp-sourcemaps');
+    var gulpIf = require('gulp-if');
+
     return browserify({
         entries: ['./src/js/main.js'],
-        debug: true
+        debug: !isProduction
     })
         .require(__dirname + '/config.json', {expose: 'config'})
         .bundle()
@@ -35,6 +28,12 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function () {
+    var postcss = require('gulp-postcss');
+    var autoprefixer = require('autoprefixer');
+    var postcssImport = require('postcss-import');
+    var postcssNested = require('postcss-nested');
+    var cssmin = require('gulp-cssmin');
+
     return gulp.src('./src/css/main.css')
         .pipe(postcss([
           postcssImport,
@@ -56,6 +55,8 @@ gulp.task('copy', function () {
 });
 
 gulp.task('watch', function () {
+    var livereload = require('gulp-livereload');
+
     livereload.listen();
     gulp.watch('./src/index.html', ['copy']);
     gulp.watch('./src/js/**/*.js', ['js']);
