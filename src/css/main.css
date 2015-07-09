@@ -263,10 +263,9 @@ a,a:link,a:active,a:visited{
         display:block;
         width:100%;
         max-width: none; /*override normalize rules */
-        transition: width .2s, height .2s;
-        transition-timing-function: linear;
-        &.zoom {
-            width:200%;
+        &.zoom-transition {
+          transition: width .2s, height .2s;
+          transition-timing-function: linear;
         }
     }
 

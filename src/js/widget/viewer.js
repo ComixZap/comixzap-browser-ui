@@ -35,6 +35,8 @@ module.exports = klass(EventEmitter).extend({
         this.$image.on('dblclick', function()
         {
             //we cannot use .css(), we need the actual percentage, not computed style
+            self.$image.addClass('zoom-transition');
+            setTimeout($.fn.removeClass.bind(self.$image, 'zoom-transition'), 200);
             if (this.style.width === '200%') {
                 this.style.width = '100%';
             } else {
