@@ -87,12 +87,16 @@ module.exports = klass(EventEmitter).extend({
     },
     preloadThumbs: function () {
         var self = this;
+        var currentFile = this.curentFile;
         var promise = new Promise(function (resolve, reject) {
             resolve();
         });
         this.$currentFileList.find('li').each(function (index, element) {
             var $element = $(element);
             promise = promise.then(function () {
+                if (self.currentFile != currentFile) {
+                    return Promise.reject();
+                }
                 return self.loadThumb($element);
             });
         });

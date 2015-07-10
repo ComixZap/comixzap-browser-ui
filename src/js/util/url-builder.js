@@ -9,7 +9,7 @@ var IMAGE_URL = '/comic/image';
 
 var UrlBuilder = module.exports = {
   getFileListUrl: function (path) {
-    return API_ROOT + FILES_URL + UrlBuilder.objectToQueryString({file: path}, '?');
+    return API_ROOT + FILES_URL + UrlBuilder.objectToQueryString({directory: path}, '?');
   },
   getComicPagesUrl: function (path) {
     return API_ROOT + PAGES_URL + UrlBuilder.objectToQueryString({file: path}, '?');
@@ -25,7 +25,10 @@ var UrlBuilder = module.exports = {
       groups = [],
       prefix = prefix || '';
     for (var x in obj) {
-      groups.push(encodeURIComponent(x) + '=' + encodeURIComponent(obj[x]));
+      var value = obj[x];
+      if (typeof value != 'undefined') {
+        groups.push(encodeURIComponent(x) + '=' + encodeURIComponent(value));
+      }
     }
     if (groups.length < 1) {
       return '';
