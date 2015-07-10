@@ -88,9 +88,7 @@ module.exports = klass(EventEmitter).extend({
     preloadThumbs: function () {
         var self = this;
         var currentFile = this.curentFile;
-        var promise = new Promise(function (resolve, reject) {
-            resolve();
-        });
+        var promise = Promise.resolve();
         this.$currentFileList.find('li').each(function (index, element) {
             var $element = $(element);
             promise = promise.then(function () {
