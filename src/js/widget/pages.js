@@ -7,6 +7,7 @@ var path = require('path');
 var Hogan = require('hogan');
 var Dao = require('../util/dao.js');
 var UrlBuilder = require('../util/url-builder.js');
+var Promise = require('bluebird');
 
 module.exports = klass(EventEmitter).extend({
     currentFile: null,
@@ -16,6 +17,7 @@ module.exports = klass(EventEmitter).extend({
     initialize: function (selector) {
         this.currentFile = null;
         this.$root = $(selector);
+        this.$preload = this.$root.find('.preload');
         this.$currentFileList = this.$root.find('.current-file-list');
         this.$currentFileTitle = this.$root.find('.current-file-title')
         this.initializeTemplates();
@@ -25,6 +27,11 @@ module.exports = klass(EventEmitter).extend({
         var self = this;
         this.$root.on('click', 'a', function (e) {
             self.emit('click');
+        });
+
+        this.$preload.on('click', function (e) {
+            e.preventDefault();
+            self.preloadThumbs();
         });
     },
     setCurrentFile: function (filename) {
@@ -78,16 +85,41 @@ module.exports = klass(EventEmitter).extend({
         this.loadThumb($pageElement);
         this.emit('page', {path: this.currentFile, filename: filename});
     },
+    preloadThumbs: function () {
+        var self = this;
+        var promise = new Promise(function (resolve, reject) {
+            resolve();
+        });
+        this.$currentFileList.find('li').each(function (index, element) {
+            var $element = $(element);
+            promise = promise.then(function () {
+                return self.loadThumb($element);
+            });
+        });
+        return promise;
+    },
     loadThumb: function ($pageElement) {
+        var self = this;
         var $thumb = $pageElement.find('.page-thumb');
         var thumb = $thumb.find('img')[0];
-        if ($thumb.hasClass('no-src')) {
-            var filename = $pageElement.attr('data-filename');
-            thumb.src = UrlBuilder.getImageFilenameUrl(this.currentFile, filename);
-            thumb.onload = function () {
-                $thumb.removeClass('no-src');
+        return new Promise(function (resolve, reject) {
+            if ($thumb.hasClass('no-src')) {
+                var filename = $pageElement.attr('data-filename');
+                thumb.src = UrlBuilder.getImageFilenameUrl(self.currentFile, filename);
+                thumb.onload = function () {
+                    $thumb.removeClass('no-src');
+                    thumb.onerror = null;
+                    resolve();
+                }
+                thumb.onerror = function () {
+                    // TODO: handle image errors
+                    thumb.onload = null;
+                    reject();
+                }
+            } else {
+                resolve();
             }
-        }
+        });
     },
     nextPage: function () {
         if (this.currentFile && this.page <= this.lastPage - 1) {
