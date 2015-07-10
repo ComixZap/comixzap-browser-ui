@@ -3,7 +3,8 @@
 var $ = require('jquery');
 var EventEmitter = require('events').EventEmitter;
 var klass = require('klass');
-var distance = require('../util/distance');
+var distance = require('../util/distance.js');
+var UrlBuilder = require('../util/url-builder.js');
 
 // how much to divide deltaX by
 var ZOOM_DIVIDEND = 100;
@@ -16,13 +17,9 @@ module.exports = klass(EventEmitter).extend({
     initialize: function (selector, config)
     {
         this.config = config || {};
-        this.apiRoot = config.api_root || '';
         this.$root = $(selector);
         this.$image = this.$root.find('.image');
         this.bindEvents();
-    },
-    getImageUrl: function (data) {
-        return this.apiRoot + this.url + '?file=' + encodeURIComponent(data.path) + (data.filename ? ('&extract_file=' + encodeURIComponent(data.filename)) : ('&offset=' + data.offset));
     },
     bindEvents: function()
     {
@@ -96,6 +93,6 @@ module.exports = klass(EventEmitter).extend({
     {
         this.$root.scrollTop(0);
         this.$image.hide();
-        this.$image.attr('src', this.getImageUrl(data));
+        this.$image.attr('src', UrlBuilder.getImageFilenameUrl(data.path, data.filename));
     }
 });

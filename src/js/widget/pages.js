@@ -5,6 +5,8 @@ var EventEmitter = require('events').EventEmitter;
 var klass = require('klass');
 var path = require('path');
 var Hogan = require('hogan');
+var Dao = require('../util/dao.js');
+var UrlBuilder = require('../util/url-builder.js');
 
 module.exports = klass(EventEmitter).extend({
     currentFile: null,
@@ -18,9 +20,6 @@ module.exports = klass(EventEmitter).extend({
         this.$currentFileTitle = this.$root.find('.current-file-title')
         this.initializeTemplates();
         this.bindEvents();
-    },
-    setDao: function (dao) {
-        this.dao = dao;
     },
     bindEvents: function () {
         var self = this;
@@ -36,7 +35,7 @@ module.exports = klass(EventEmitter).extend({
         var self = this;
         if (this.currentFile != filename) {
             this.displayLoading();
-            this.dao.getComicPages(filename, function (err, path, pages) {
+            Dao.getComicPages(filename, function (err, path, pages) {
                 if (err) return self.displayError(err);
                 self.setCurrentFile(filename);
                 self.updatePages(path, pages);
@@ -74,10 +73,21 @@ module.exports = klass(EventEmitter).extend({
         this.page = +page;
         var $pageElement = this.$currentFileList.find('li').eq(page - 1);
         $pageElement.addClass('active');
-        var offset = $pageElement.attr('data-offset');
         var filename = $pageElement.attr('data-filename');
         this.$currentElement = $pageElement;
-        this.emit('page', {path: this.currentFile, offset: offset, filename: filename});
+        this.loadThumb($pageElement);
+        this.emit('page', {path: this.currentFile, filename: filename});
+    },
+    loadThumb: function ($pageElement) {
+        var $thumb = $pageElement.find('.page-thumb');
+        var thumb = $thumb.find('img')[0];
+        if ($thumb.hasClass('no-src')) {
+            var filename = $pageElement.attr('data-filename');
+            thumb.src = UrlBuilder.getImageFilenameUrl(this.currentFile, filename);
+            thumb.onload = function () {
+                $thumb.removeClass('no-src');
+            }
+        }
     },
     nextPage: function () {
         if (this.currentFile && this.page <= this.lastPage - 1) {

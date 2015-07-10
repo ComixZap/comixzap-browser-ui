@@ -5,6 +5,7 @@ var EventEmitter = require('events').EventEmitter;
 var klass = require('klass');
 var Hogan = require('hogan');
 var Promise = require('bluebird');
+var Dao = require('../util/dao.js');
 
 module.exports = klass(EventEmitter).extend({
     inhibitScroll: false,
@@ -13,9 +14,6 @@ module.exports = klass(EventEmitter).extend({
         this.$currentElement = null;
         this.initializeTemplates();
         this.bindEvents();
-    },
-    setDao: function (dao) {
-        this.dao = dao;
     },
     start: function () {
         return this.getFiles('');
@@ -69,7 +67,7 @@ module.exports = klass(EventEmitter).extend({
         }
         var $directoryChildren = $element.children('.directory-children');
         $directoryChildren.empty().append(this.loadingTemplate.render());
-        self.dao.getFileList(path, function (err, directory, files) {
+        Dao.getFileList(path, function (err, directory, files) {
             $directoryChildren.empty();
             $directoryChildren.hide();
             if (err) return deferred.reject();

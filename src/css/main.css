@@ -173,9 +173,10 @@ a,a:link,a:active,a:visited{
     }
     .browser-item {
         > a {
-            display: block;
+            display: inline-block;
             position:relative;
             min-height: 25px;
+            min-width: 100%;
         }
         .browser-icon {
             position:absolute;
@@ -244,13 +245,29 @@ a,a:link,a:active,a:visited{
     .current-file-list > li {
         position:relative;
         cursor:pointer;
+        white-space: nowrap;
         .no-src {
             visibility: hidden;
         }
+        .page-thumb {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0px;
+            img {
+                max-height: 2em;
+                max-width: 2em;
+            }
+        }
+        .page-filename {
+            padding-left: 3em;
+        }
         > a {
-            display: block;
-            word-break: break-all;
+            display: inline-block;
             padding: 8px 0;
+            position: relative;
+            transform-style: preserve-3d;
+            min-width: 100%;
         }
         &.selected > a {
             background:#aaf;

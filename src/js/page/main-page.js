@@ -10,8 +10,6 @@ var PagesWidget = require('../widget/pages.js');
 var ViewerWidget = require('../widget/viewer.js');
 var Promise = require('bluebird');
 
-var CbzReaderDao = require('../dao/cbz-reader.js');
-
 var MODE_NONE    = 0;
 var MODE_BROWSER = 1;
 var MODE_PAGES   = 2;
@@ -30,17 +28,8 @@ module.exports = klass(EventEmitter).extend({
         this.pages   = new PagesWidget('#cbz-reader-pages');
         this.viewer  = new ViewerWidget('#cbz-reader-viewer', config);
         this.fullscreenEl = fullscreen(document.body);
-        this.attachDao();
         this.bindEvents();
         this.start();
-    },
-    attachDao: function ()
-    {
-        var dao = new CbzReaderDao();
-        dao.setApiRoot(this.config.api_root || '');
-
-        this.browser.setDao(dao);
-        this.pages.setDao(dao);
     },
     bindEvents: function ()
     {

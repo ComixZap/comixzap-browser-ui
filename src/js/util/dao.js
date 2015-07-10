@@ -2,36 +2,15 @@
 
 var $ = require('jquery');
 var klass = require('klass');
+var UrlBuilder = require('./url-builder.js');
 
 $.support.cors = true;
 
-module.exports = klass({
-    initialize: function ()
-    {
-        this.comicPagesUrl = '/comic/list';
-        this.fileListUrl   = '/file-list';
-    },
-    setApiRoot: function (apiRoot) {
-        this.apiRoot = apiRoot;
-    },
-    setComicPagesUrl: function (url)
-    {
-        this.comicPagesUrl = url
-    },
-    setFileListUrl: function (url)
-    {
-        this.fileListUrl = url
-    },
-    getFileListUrl: function () {
-        return this.apiRoot + this.fileListUrl;
-    },
-    getComicPagesUrl: function () {
-        return this.apiRoot + this.comicPagesUrl;
-    },
+module.exports = {
     getFileList: function (path, cb)
     {
         $.ajax({
-            url: this.getFileListUrl(),
+            url: UrlBuilder.getFileListUrl(),
             data: {directory: path},
             success: function (returnValue) {
                 if (returnValue.status === 0) {
@@ -48,7 +27,7 @@ module.exports = klass({
     getComicPages: function (path, cb)
     {
         $.ajax({
-            url: this.getComicPagesUrl(),
+            url: UrlBuilder.getComicPagesUrl(),
             data: {file: path},
             success: function (returnValue) {
                 if (returnValue.status === 0) {
@@ -62,4 +41,4 @@ module.exports = klass({
             }
         });
     }
-});
+}
