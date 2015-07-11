@@ -114,13 +114,13 @@ module.exports = klass(EventEmitter).extend({
             if ($thumb.hasClass('no-src')) {
                 var filename = $pageElement.attr('data-filename');
                 thumb.src = UrlBuilder.getImageFilenameUrl(self.currentFile, filename);
-                thumb.onload = function () {
+                thumb.addEventListener('load', function (e) {
                     $thumb.removeClass('no-src');
                     resolve();
-                }
-                thumb.onerror = function (e) {
+                });
+                thumb.addEventListener('error', function (e) {
                     reject(new Error('Thumbnail image `' + thumb.src + '` could not be loaded'));
-                }
+                });
             } else {
                 resolve();
             }
