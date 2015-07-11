@@ -82,22 +82,28 @@ module.exports = klass(EventEmitter).extend({
         $pageElement.addClass('active');
         var filename = $pageElement.attr('data-filename');
         this.$currentElement = $pageElement;
-        this.loadThumb($pageElement);
+        this.loadThumb($pageElement).catch(function (err) {
+            // TOOO: Handle thumbnail errors
+        });
         this.emit('page', {path: this.currentFile, filename: filename});
     },
     preloadThumbs: function () {
         var self = this;
-        var currentFile = this.curentFile;
+        var currentFile = this.currentFile;
         var promise = Promise.resolve();
         this.$currentFileList.find('li').each(function (index, element) {
             var $element = $(element);
             promise = promise.then(function () {
-                if (self.currentFile != currentFile) {
-                    return Promise.reject();
+                if (self.currentFile == currentFile) {
+                    return self.loadThumb($element);
                 }
-                return self.loadThumb($element);
             });
         });
+
+        promise.catch(function (err) {
+            // TOOO: Handle thumbnail errors
+        });
+
         return promise;
     },
     loadThumb: function ($pageElement) {
@@ -110,13 +116,10 @@ module.exports = klass(EventEmitter).extend({
                 thumb.src = UrlBuilder.getImageFilenameUrl(self.currentFile, filename);
                 thumb.onload = function () {
                     $thumb.removeClass('no-src');
-                    thumb.onerror = null;
                     resolve();
                 }
-                thumb.onerror = function () {
-                    // TODO: handle image errors
-                    thumb.onload = null;
-                    reject();
+                thumb.onerror = function (e) {
+                    reject(new Error('Thumbnail image `' + thumb.src + '` could not be loaded'));
                 }
             } else {
                 resolve();
