@@ -219,7 +219,7 @@ a,a:link,a:active,a:visited{
     .loading {
         position: relative;
         .loading-icon {
-            animation: cz-spin 1s infinite linear;
+            animation: cz-spin 1s steps(8) infinite;
         }
     }
 }
@@ -236,7 +236,7 @@ a,a:link,a:active,a:visited{
         color:#666;
         text-transform:uppercase;
         .loading-icon {
-            animation: cz-spin 1s infinite linear;
+            animation: cz-spin 1s steps(8) infinite;
         }
     }
     .current-file-contents {
@@ -380,12 +380,12 @@ a,a:link,a:active,a:visited{
 
 /* copied from FontAwesome fa-spin */
 @keyframes cz-spin {
-    0% {
-        transform: rotate(0deg)
+    from {
+        transform: rotate(0deg);
     }
 
-    100% {
-        transform: rotate(359deg)
+    to {
+        transform: rotate(-360deg);
     }
 }
 
