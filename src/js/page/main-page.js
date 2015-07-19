@@ -8,6 +8,7 @@ var ToolbarWidget = require('../widget/toolbar.js');
 var BrowserWidget = require('../widget/browser.js');
 var PagesWidget = require('../widget/pages.js');
 var ViewerWidget = require('../widget/viewer.js');
+var OverlayWidget = require('../widget/overlay.js');
 var Promise = require('bluebird');
 
 var MODE_NONE    = 0;
@@ -27,6 +28,7 @@ module.exports = klass(EventEmitter).extend({
         this.browser = new BrowserWidget('#cbz-reader-browser');
         this.pages   = new PagesWidget('#cbz-reader-pages');
         this.viewer  = new ViewerWidget('#cbz-reader-viewer', config);
+        this.overlay = new OverlayWidget('#cbz-reader-overlay');
         this.fullscreenEl = fullscreen(document.body);
         this.bindEvents();
         this.start();
@@ -39,6 +41,8 @@ module.exports = klass(EventEmitter).extend({
         this.pages.on('page', this.onPage.bind(this));
         this.pages.on('update', this.onPageUpdate.bind(this));
         this.pages.on('click', this.onPageClick.bind(this));
+        this.overlay.on('reload', this.onReload.bind(this));
+        this.overlay.on('fullscreen', this.toggleFullscreen.bind(this));
     },
     onPageClick: function () {
         this.inhibitBrowserScroll();
@@ -51,6 +55,10 @@ module.exports = klass(EventEmitter).extend({
     {
         this.toolbar.togglePrevious(page != 1);
         this.toolbar.toggleNext(page <= pages - 1);
+    },
+    onReload: function () {
+        this.setMode(MODE_BROWSER);
+        this.browser.start();
     },
     onToolbarClick: function (action)
     {
@@ -70,8 +78,8 @@ module.exports = klass(EventEmitter).extend({
             this.pages.nextPage();
         } else if (action == 'previous-page') {
             this.pages.previousPage();
-        } else if (action == 'fullscreen') {
-            this.toggleFullscreen();
+        } else if (action == 'overlay') {
+            this.overlay.show();
         }
     },
     toggleFullscreen: function ()

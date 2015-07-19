@@ -1,0 +1,9 @@
+<li class="browser-item" data-path="{{ path }}" data-filetype="{{#directory}}directory{{/directory}}{{^directory}}file{{/directory}}">
+    <a href="#!{{ path }}{{^directory}}::1{{/directory}}">
+        <span class="browser-icon {{#directory}}icon-folder{{/directory}}{{^directory}}icon-file-text{{/directory}}"></span>
+        <span class="file-name">{{ filename }}</span>
+    </a>
+    {{#directory}}
+    <ol class="nav directory-children"></ol>
+    {{/directory}}
+</li>

@@ -21,6 +21,7 @@
     "postcss": "*",
     "postcss-import": "*",
     "postcss-nested": "*",
+    "through2": "*",
     "vinyl-buffer": "*",
     "vinyl-source-stream": "*"
   }

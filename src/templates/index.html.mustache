@@ -37,7 +37,7 @@
                         <a class="button icon-file-text" data-action="toggle-pages"></a>
                     </div>
                     <div class="toolbar-right navbar-right">
-                        <a class="button icon-enlarge" data-action="fullscreen"></a>
+                        <a class="button icon-cog" data-action="overlay"></a>
                     </div>
                     <div class="toolbar-center">
                         <a class="button icon-arrow-left" data-action="previous-page" disabled></a>
@@ -64,39 +64,40 @@
                 </div>
             </div>
         </div>
-        <script id="cz-template-browser-row" type="application/x-template">
-            <li class="browser-item" data-path="{{ path }}" data-filetype="{{#directory}}directory{{/directory}}{{^directory}}file{{/directory}}">
-                <a href="#!{{ path }}{{^directory}}::1{{/directory}}">
-                    <span class="browser-icon {{#directory}}icon-folder{{/directory}}{{^directory}}icon-file-text{{/directory}}"></span>
-                    <span class="file-name">{{ filename }}</span>
-                </a>
-                {{#directory}}
-                <ol class="nav directory-children"></ol>
-                {{/directory}}
-            </li>
+        <div id="cbz-reader-overlay">
+            <ul class="overlay-options">
+                <li>
+                    <a href="javascript:" class="button" data-action="reload">Reload</a>
+                </li>
+                <li>
+                    <a href="javascript:" class="button" data-action="fullscreen">Fullscreen</a>
+                </li>
+                {{!<li>
+                  <fieldset>
+                    <legend>Bookmarks</legend>
+                    <ul class="bookmark-list">
+                    </ul>
+                  </fieldset>
+                </li>}}
+                {{# config.can_set_root }}
+                <li>
+                  <fieldset>
+                    <legend>Set API Root</legend>
+                    <input type="text" name="api-root" value="{{ config.api_root }}" />
+                    <a href="javascript:" class="button" data-action="set-root">Save</a>
+                  </fieldset>
+                </li>
+                {{/ config.can_set_root }}
+                <li>
+                    <a href="javascript:" class="button close" data-action="close">Close</a>
+                </li>
+            </ul>
+        </div>
+        {{# templates }}
+        <script id="cz-template-{{ name }}" type="application/x-template">
+{{{ template }}}
         </script>
-        <script id="cz-template-browser-loading" type="application/x-template">
-            <li class="browser-item loading">
-                <span class="browser-icon">
-                    <span class="loading-icon icon-spinner6"></span>
-                </span>
-                <span class="file-name">Loading ...</span>
-            </li>
-        </script>
-        <script id="cz-template-page-row" type="application/x-template">
-            <li {{#filename}}data-filename="{{ filename }}"{{/filename}} {{#fileOffset}}data-offset="{{ fileOffset }}"{{/fileOffset}} data-index={{ index }}>
-                <a href="#!{{ path }}::{{ index }}">
-                    <span  class="page-thumb no-src">
-                      <img/>
-                    </span>
-                    <span class="page-filename">{{ filename }}</span>
-                </a>
-            </li>
-        </script>
-        <script id="cz-template-page-loading" type="application/x-template">
-            <span class="loading-icon icon-spinner6"></span>
-            <span class="file-name">Loading ...</span>
-        </script>
+        {{/ templates }}
         <script src="js/main.js"></script>
     </body>
 </html>

@@ -1,7 +1,10 @@
 'use strict';
 
+var Path = require('path');
 var gulp = require('gulp');
 var isProduction = process.env.APPLICATION_ENVIRONMENT === 'production';
+
+var SRC = Path.join(__dirname, 'src');
 
 gulp.task('js', function () {
   var browserify = require('browserify');
@@ -12,7 +15,7 @@ gulp.task('js', function () {
   var gulpIf = require('gulp-if');
 
   return browserify({
-    entries: ['./src/js/main.js'],
+    entries: [Path.join(SRC, '/js/main.js')],
     debug: !isProduction
   })
     .require(__dirname + '/config.json', {expose: 'config'})
@@ -52,6 +55,38 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('./dist'));
 });
 
+// TODO: streamify this
+gulp.task('templates', function () {
+  var fs = require('fs');
+  var Hogan = require('hogan');
+  var config = require(__dirname + '/config.json');
+  var through = require('through2');
+
+  var templatesPath = Path.join(__dirname, 'src', 'templates');
+
+  // build overall context
+  // TODO: streamify
+  var templates = fs.readdirSync(Path.join(templatesPath, 'embedded')).map(function (filename) {
+    var name = filename.match(/^[^.]+/)[0];
+    var template = fs.readFileSync(Path.join(templatesPath, 'embedded', filename));
+    return {name: name, template: template};
+  });
+
+  var context = {
+    config: config,
+    templates: templates,
+  };
+
+  gulp.src(Path.join(templatesPath, '*.mustache'))
+    .pipe(through.obj(function (file, enc, cb) {
+      file.contents = new Buffer(Hogan.compile(file.contents.toString()).render(context));
+      file.path = file.path.replace(/\.mustache$/, '');
+      this.push(file);
+    }))
+    .pipe(gulp.dest('./dist'));
+
+});
+
 gulp.task('images', function () {
   return gulp.src('./src/images/**/*')
     .pipe(gulp.dest('./dist'));
@@ -61,13 +96,14 @@ gulp.task('watch', function () {
   var livereload = require('gulp-livereload');
 
   livereload.listen();
-  gulp.watch('./src/index.html', ['copy']);
+  gulp.watch('./src/*', ['copy']);
+  gulp.watch('./src/templates', ['templates']);
   gulp.watch('./src/images/**/*', ['images']);
   gulp.watch('./src/js/**/*.js', ['js']);
   gulp.watch('./src/css/**/*.css', ['css']);
   gulp.watch('./dist/**').on('change', livereload.changed);
 });
 
-gulp.task('build', ['copy', 'images', 'icons', 'css', 'js']);
+gulp.task('build', ['copy', 'templates', 'images', 'icons', 'css', 'js']);
 
 gulp.task('default', ['build', 'watch']);

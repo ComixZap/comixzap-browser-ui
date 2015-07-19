@@ -8,6 +8,9 @@ var PAGES_URL = '/comic/list';
 var IMAGE_URL = '/comic/image';
 
 var UrlBuilder = module.exports = {
+  setApiRoot: function (apiRoot) {
+    API_ROOT = apiRoot;
+  },
   getFileListUrl: function (path) {
     return API_ROOT + FILES_URL + UrlBuilder.objectToQueryString({directory: path}, '?');
   },
