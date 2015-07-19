@@ -10,6 +10,7 @@ var PagesWidget = require('../widget/pages.js');
 var ViewerWidget = require('../widget/viewer.js');
 var OverlayWidget = require('../widget/overlay.js');
 var Promise = require('bluebird');
+var Bookmarks = require('../util/bookmarks.js');
 
 var MODE_NONE    = 0;
 var MODE_BROWSER = 1;
@@ -43,6 +44,7 @@ module.exports = klass(EventEmitter).extend({
         this.pages.on('click', this.onPageClick.bind(this));
         this.overlay.on('reload', this.onReload.bind(this));
         this.overlay.on('fullscreen', this.toggleFullscreen.bind(this));
+        this.overlay.on('bookmark', this.onBookmark.bind(this));
     },
     onPageClick: function () {
         this.inhibitBrowserScroll();
@@ -59,6 +61,10 @@ module.exports = klass(EventEmitter).extend({
     onReload: function () {
         this.setMode(MODE_BROWSER);
         this.browser.start();
+    },
+    onBookmark: function () {
+        Bookmarks.addBookmark(window.location.hash);
+        this.overlay.emit('bookmarks-updated');
     },
     onToolbarClick: function (action)
     {
