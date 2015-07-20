@@ -321,7 +321,7 @@ a,a:link,a:active,a:visited{
   .loading {
     position: relative;
     .loading-icon {
-      animation: cz-spin 1s infinite linear;
+      animation: cz-spin 1s infinite steps(8);
     }
   }
 }
@@ -338,7 +338,7 @@ a,a:link,a:active,a:visited{
     color:#666;
     text-transform:uppercase;
     .loading-icon {
-      animation: cz-spin 1s infinite linear;
+      animation: cz-spin 1s infinite steps(8);
     }
   }
   .current-file-contents {
@@ -487,7 +487,7 @@ a,a:link,a:active,a:visited{
   }
 
   100% {
-    transform: rotate(359deg)
+    transform: rotate(-360deg)
   }
 }
 
