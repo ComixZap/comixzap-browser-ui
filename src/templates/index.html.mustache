@@ -1,106 +1,108 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>ComixZap Reader</title>
-        <meta name="description" content="A reader for CBZ files">
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
-        <link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
-        <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
-        <link rel="icon" type="image/png" href="favicon-194x194.png" sizes="194x194">
-        <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-        <link rel="icon" type="image/png" href="android-chrome-192x192.png" sizes="192x192">
-        <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
-        <link rel="manifest" href="manifest.json">
-        <meta name="apple-mobile-web-app-title" content="ComixZap">
-        <meta name="application-name" content="ComixZap">
-        <meta name="msapplication-TileColor" content="#b91d47">
-        <meta name="msapplication-TileImage" content="mstile-144x144.png">
-        <meta name="theme-color" content="#ffffff">
-        <link rel="stylesheet" media="all" href="css/main.css" />
-    </head>
-    <body>
-        <div id="cbz-reader-container">
-            <div id="cbz-reader-toolbar" class="navbar navbar-default" role="navigation">
-                <div class="toolbar-body">
-                    <div class="toolbar-left navbar-left">
-                        <a class="button icon-folder" data-action="toggle-browser"></a>
-                        <a class="button icon-file-text" data-action="toggle-pages"></a>
-                    </div>
-                    <div class="toolbar-right navbar-right">
-                        <a class="button icon-cog" data-action="overlay"></a>
-                    </div>
-                    <div class="toolbar-center">
-                        <a class="button icon-arrow-left" data-action="previous-page" disabled></a>
-                        <a class="button icon-arrow-right" data-action="next-page" disabled></a>
-                    </div>
-                </div>
-            </div>
-            <div id="cbz-reader-body">
-                <div id="cbz-reader-browser">
-                    <div class="browser-root">
-                        <ol class="nav directory-children"></ol>
-                    </div>
-                </div>
-                <div id="cbz-reader-viewer">
-                    <img class="image" />
-                </div>
-                <div id="cbz-reader-pages">
-                    <div class="pages-wrapper">
-                        <div class="current-file-title">No File</div>
-                        <a class="button preload">Preload</a>
-                        <ol class="nav current-file-list">
-                        </ol>
-                    </div>
-                </div>
-            </div>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>ComixZap Reader</title>
+    <meta name="description" content="A reader for CBZ files">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+    <link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-title" content="ComixZap">
+    <meta name="application-name" content="ComixZap">
+    <meta name="msapplication-TileColor" content="#b91d47">
+    <meta name="msapplication-TileImage" content="mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" media="all" href="css/main.css" />
+  </head>
+  <body>
+    <div id="cbz-reader-container">
+      <div id="cbz-reader-toolbar" class="navbar navbar-default" role="navigation">
+        <div class="toolbar-body">
+          <div class="toolbar-left navbar-left">
+            <a class="button icon-folder" data-action="toggle-browser"></a>
+            <a class="button icon-file-text" data-action="toggle-pages"></a>
+          </div>
+          <div class="toolbar-right navbar-right">
+            <a class="button icon-cog" data-action="overlay"></a>
+          </div>
+          <div class="toolbar-center">
+            <a class="button icon-arrow-left" data-action="previous-page" disabled></a>
+            <a class="button icon-arrow-right" data-action="next-page" disabled></a>
+          </div>
         </div>
-        <div id="cbz-reader-overlay">
-            <ul class="overlay-options">
-                <li>
-                    <a href="javascript:" class="button" data-action="reload">Reload</a>
-                </li>
-                <li>
-                    <a href="javascript:" class="button" data-action="fullscreen">Fullscreen</a>
-                </li>
-                <li>
-                    <a href="javascript:" class="button" data-action="bookmark">Bookmark</a>
-                </li>
-                <li>
-                  <fieldset>
-                    <legend>Bookmarks</legend>
-                    <ul class="bookmark-list">
-                    </ul>
-                  </fieldset>
-                </li>
-                {{# config.can_set_root }}
-                <li>
-                  <fieldset>
-                    <legend>Set API Root</legend>
-                    <input type="text" name="api-root" value="{{ config.api_root }}" />
-                    <a href="javascript:" class="button" data-action="set-root">Save</a>
-                  </fieldset>
-                </li>
-                {{/ config.can_set_root }}
-                <li>
-                    <a href="javascript:" class="button close" data-action="close">Close</a>
-                </li>
+      </div>
+      <div id="cbz-reader-body">
+        <div id="cbz-reader-browser">
+          <div class="browser-root">
+            <ol class="nav directory-children"></ol>
+          </div>
+        </div>
+        <div id="cbz-reader-viewer">
+          <img class="image" />
+        </div>
+        <div id="cbz-reader-pages">
+          <div class="pages-wrapper">
+            <div class="current-file-title">No File</div>
+            {{# config.enable_preload }}
+              <a class="button preload">Preload</a>
+            {{/ config.enable_preload }}
+            <ol class="nav current-file-list">
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="cbz-reader-overlay">
+      <ul class="overlay-options">
+        <li>
+          <a href="javascript:" class="button" data-action="reload">Reload</a>
+        </li>
+        <li>
+          <a href="javascript:" class="button" data-action="fullscreen">Fullscreen</a>
+        </li>
+        <li>
+          <a href="javascript:" class="button" data-action="bookmark">Bookmark</a>
+        </li>
+        <li>
+          <fieldset>
+            <legend>Bookmarks</legend>
+            <ul class="bookmark-list">
             </ul>
-        </div>
-        {{# templates }}
-        <script id="cz-template-{{ name }}" type="application/x-template">
+          </fieldset>
+        </li>
+        {{# config.enable_change_api_root }}
+          <li>
+            <fieldset>
+              <legend>Set API Root</legend>
+              <input type="text" name="api-root" value="{{ config.api_root }}" />
+              <a href="javascript:" class="button" data-action="set-root">Save</a>
+            </fieldset>
+          </li>
+        {{/ config.enable_change_api_root }}
+        <li>
+          <a href="javascript:" class="button close" data-action="close">Close</a>
+        </li>
+      </ul>
+    </div>
+    {{# templates }}
+      <script id="cz-template-{{ name }}" type="application/x-template">
 {{{ template }}}
-        </script>
-        {{/ templates }}
-        <script src="js/main.js"></script>
-    </body>
+      </script>
+    {{/ templates }}
+    <script src="js/main.js"></script>
+  </body>
 </html>
