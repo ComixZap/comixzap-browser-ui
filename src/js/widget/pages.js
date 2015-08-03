@@ -1,5 +1,6 @@
 'use strict';
 
+var config = require('config');
 var $ = require('jquery');
 var EventEmitter = require('events').EventEmitter;
 var klass = require('klass');
@@ -70,6 +71,7 @@ module.exports = klass(EventEmitter).extend({
     pages.forEach(function (page, index) {
       var data = $.extend({}, page, {index: index + 1, path: path});
       data.fileOffset = ''+data.fileOffset;
+      data.thumbs_enabled = config.enable_thumbs;
       self.$currentFileList.append(self.pageRowTemplate.render(data));
     });
   },
@@ -82,9 +84,11 @@ module.exports = klass(EventEmitter).extend({
     $pageElement.addClass('active');
     var filename = $pageElement.attr('data-filename');
     this.$currentElement = $pageElement;
-    this.loadThumb($pageElement).catch(function (err) {
-      // TOOO: Handle thumbnail errors
-    });
+    if (config.enable_thumbs) {
+      this.loadThumb($pageElement).catch(function (err) {
+        // TOOO: Handle thumbnail errors
+      });
+    }
     this.emit('page', {path: this.currentFile, filename: filename});
   },
   preloadThumbs: function () {

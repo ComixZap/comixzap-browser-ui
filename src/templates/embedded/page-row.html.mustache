@@ -1,8 +1,10 @@
 <li {{#filename}}data-filename="{{ filename }}"{{/filename}} {{#fileOffset}}data-offset="{{ fileOffset }}"{{/fileOffset}} data-index={{ index }}>
   <a href="#!{{ path }}::{{ index }}">
-    <span  class="page-thumb no-src">
-      <img/>
-    </span>
+    {{#thumbs_enabled}}
+      <span  class="page-thumb no-src">
+        <img/>
+      </span>
+    {{/thumbs_enabled}}
     <span class="page-filename">{{ filename }}</span>
   </a>
 </li>

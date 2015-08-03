@@ -1,3 +1,6 @@
 {
-    "api_root": "http://cz-api.example.com"
+    "api_root": "http://cz-api.example.com",
+    "enable_change_api_root": false,
+    "enable_preload": false,
+    "enable_thumbs": false
 }
